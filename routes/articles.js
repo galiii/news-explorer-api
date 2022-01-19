@@ -1,5 +1,6 @@
 const articlesRouter = require("express").Router();
 const { celebrate, Joi } = require("celebrate");
+
 const auth = require("../middleware/auth");
 
 const {
@@ -32,7 +33,7 @@ articlesRouter.delete(
   auth,
   celebrate({
     params: Joi.object().keys({
-      articleId: Joi.string().required().hex(),
+      articleId: Joi.string().hex().length(24),
     }),
   }),
   deleteArticle,

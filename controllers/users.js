@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 const User = require("../models/user");
 const NotFoundError = require("../errors/not-found-error"); // 404
 
@@ -10,7 +8,6 @@ const getUsers = (req, res, next) => {
 };
 
 const getUserById = (req, res, next) => {
-  // console.log("user", req.user._id);
   const userId = req.user._id;
   User.findById(userId)
     .orFail(() => {

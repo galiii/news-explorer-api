@@ -1,11 +1,11 @@
-const router = require("express").Router();
+const mainRouter = require("express").Router();
 
 const auth = require("./auth");
 const users = require("./users");
 const articles = require("./articles");
 
-router.use("/", auth);
-router.use("/users", users);
-router.use("/articles", articles);
+mainRouter.use("/", auth);
+mainRouter.use("/users", users);
+mainRouter.use("/articles", articles);
 
-module.exports = router;
+module.exports = mainRouter;

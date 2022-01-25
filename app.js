@@ -1,55 +1,53 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const dotenv = require("dotenv");
 const helmet = require("helmet");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const { errors } = require("celebrate");
-const { requestLogger, errorLogger } = require("./middleware/logger");
-const { limiter } = require("./middleware/limiter");
+require("dotenv").config();
 
-const routes = require("./routes/index");
+const { requestLogger, errorLogger } = require("./middlewares/logger");
+const { limiter } = require("./middlewares/limiter");
 const NotFoundError = require("./errors/not-found-error");
+const routes = require("./routes/index");
+const { statusListCode, errorListMessage } = require("./utils/constants");
+const { DBA, PORT } = require("./utils/configuration");
 
-dotenv.config();
-const { PORT = 3000 } = process.env;
+const app = express();
+app.use(limiter); // applying the rate-limiter
 
-mongoose.connect("mongodb://localhost:27017/newsdb", {
+// connect to the MongoDB server
+mongoose.connect(DBA, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
-const app = express();
-app.use(cors());
-app.options("*", cors());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
 app.use(helmet());
-app.use(requestLogger);
-
+app.use(bodyParser.json()); // parses data in JSON format only
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cors());
+app.options("*", cors()); // enable requests for all routes
+app.use(requestLogger); // enabling the request logger
 app.use("/", routes);
 
-app.get("*", (req, res) => {
-  throw new NotFoundError("Requested resource cannot be found");
+app.use("*", (req, res) => {
+  throw new NotFoundError(errorListMessage.requestNotFound);
 });
 
-app.use(limiter);
+app.use(errorLogger); // enabling the error logger
+app.use(errors()); // celebrate error handler
 
-app.use(errorLogger);
-app.use(errors());
-
-// central error middleware
 app.use((err, req, res, next) => {
-  // console.log(err);
-  // if an error has no status, display 500
-  const { statusCode = 500, message } = err;
+  const { statusCode = 500, message } = err; // if an error has no status, give it status 500
   res.status(statusCode).send({
-    // check the status and display a message based on it
-    message: statusCode === 500 ? "An error occurred on the server" : message,
+    message:
+      statusCode === statusListCode.ServerError
+        ? errorListMessage.server
+        : message,
   });
 });
 
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
-  console.log(`Server listening at http://localhost:${PORT}`);
+  console.log(`App listening on port ${PORT}`);
 });

@@ -2,7 +2,7 @@
 news explorer api the Backend side of the final project
 
 
-# [PRESS THIS API LINK](api.gali-news.students.nomoreparties.sbs) 
+# [PRESS THIS API LINK](gali-news.students.nomoreparties.sbs) 
 
 
 

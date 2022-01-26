@@ -6,11 +6,6 @@ const { NODE_ENV, JWT_SECRET, devEnv } = require("../utils/configuration");
 const UnAuthorizedError = require("../errors/unauthorized-error");
 const { errorListMessage } = require("../utils/constants");
 
-console.log("MIDDLEWARE");
-console.log("JWT line 9", JWT_SECRET);
-console.log("NODE line 10", NODE_ENV);
-console.log("dev env 11", devEnv);
-
 module.exports = (req, res, next) => {
   const { authorization } = req.headers;
   if (!authorization || !authorization.startsWith("Bearer ")) {

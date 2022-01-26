@@ -10,11 +10,6 @@ const ConflictError = require("../errors/conflict-error"); // 409
 const { statusListCode, errorListMessage } = require("../utils/constants");
 const { NODE_ENV, JWT_SECRET, devEnv } = require("../utils/configuration");
 
-console.log("CONTROLLERS");
-console.log("JWT line 9", JWT_SECRET);
-console.log("NODE line 10", NODE_ENV);
-console.log("dev env 11", devEnv);
-
 const createUser = (req, res, next) => {
   const { email, password, name } = req.body;
   bcrypt
@@ -30,7 +25,7 @@ const createUser = (req, res, next) => {
       });
     })
     .catch((err) => {
-      // console.log("error code line 62", err.code);
+      // console.log("error code line 28", err.code);
       if (err.name === "ValidationError" || err.name === "SyntaxError") {
         throw new BadRequestError(errorListMessage.signupBadRequest);
       } else if (err.code === 11000) {

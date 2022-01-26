@@ -3,4 +3,4 @@ news explorer api the Backend side of the final project
 
 
 
-ip : 34.82.6.83
+ip : 34.145.108.163

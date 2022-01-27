@@ -11,13 +11,18 @@ const { limiter } = require("./middlewares/limiter");
 const NotFoundError = require("./errors/not-found-error");
 const routes = require("./routes/index");
 const { statusListCode, errorListMessage } = require("./utils/constants");
-const { DBA, PORT } = require("./utils/configuration");
+const {
+  localDB,
+  DBA,
+  NODE_ENV,
+  PORT,
+} = require("./utils/configuration");
 
 const app = express();
 app.use(limiter); // applying the rate-limiter
 
 // connect to the MongoDB server
-mongoose.connect(DBA, {
+mongoose.connect(NODE_ENV === "production" ? DBA : localDB, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });

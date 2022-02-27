@@ -11,16 +11,18 @@ const { statusListCode, errorListMessage } = require("../utils/constants");
 const { NODE_ENV, JWT_SECRET, devEnv } = require("../utils/configuration");
 
 const createUser = (req, res, next) => {
-  const { email, password, name } = req.body;
+  const { email, password, username } = req.body;
+  console.log("in auth line 15",email,password,username);
   bcrypt
     .hash(password, 10)
-    .then((hash) => User.create({ email, name, password: hash }))
+    .then((hash) => User.create({ email, username, password: hash }))
     .then((userData) => {
+      console.log("user data line 19",userData)
       res.status(statusListCode.Created).send({
         data: {
           _id: userData._id,
           email: userData.email,
-          name: userData.name,
+          username: userData.username,
         },
       });
     })

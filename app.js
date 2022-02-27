@@ -17,15 +17,17 @@ const {
   NODE_ENV,
   PORT,
 } = require("./utils/configuration");
-
+console.log(NODE_ENV)
 const app = express();
 app.use(limiter); // applying the rate-limiter
 
-// connect to the MongoDB server
+// connect to the MongoDB server "mongodb://0.0.0.0:27017
 mongoose.connect(NODE_ENV === "production" ? DBA : localDB, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+//
+
 
 app.use(helmet());
 app.use(bodyParser.json()); // parses data in JSON format only

@@ -40,9 +40,10 @@ const createUser = (req, res, next) => {
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
-  // console.log("req in login", req.body);
+  console.log("req in login", req.body);
   return User.findUserByCredentials(email, password)
     .then((user) => {
+      console.log("req in login", req.body);
       const token = jwt.sign(
         { _id: user._id },
         NODE_ENV === "production" ? JWT_SECRET : devEnv,

@@ -5,8 +5,11 @@ const ForbiddenError = require("../errors/forbidden-error"); // 403
 const { statusListCode, errorListMessage } = require("../utils/constants");
 
 const getArticles = (req, res, next) => {
+  //console.log("req",req);
   Article.find({ owner: req.user._id })
-    .then((articles) => res.status(statusListCode.OK).send({ data: articles }))
+    .then((articles) => {
+      console.log(articles);
+      res.status(statusListCode.OK).send({ data: articles })})
     .catch(next);
 };
 
